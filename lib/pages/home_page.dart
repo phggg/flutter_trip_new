@@ -1,7 +1,9 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
-import 'package:http/http.dart' as http;
+import 'package:flutter_trip/pages/shared_preferences.dart';
+import 'package:flutter_trip/pages/test_async.dart';
+import 'package:flutter_trip/pages/test_future.dart';
+
 
 const int appbarScrollOffset = 100;
 class HomePage extends StatefulWidget {
@@ -18,12 +20,7 @@ class _HomePageState extends State<HomePage> {
     'https://img.win3000.com/m00/2b/38/9af24eb2152e2f5dc813d92755ae83d0.png'
   ];
   double appBarAlpha = 0;
-  String showResult = '';
-  Future<CommonModel> fetchGet() async {
-    final response = await http.get(Uri.parse('http://www.devio.org/io/flutter_app/json/test_common_model.json'));
-    final result = json.decode(response.body);
-    return CommonModel.fromJson(result);
-  }
+
 
   void _onScroll(offset){
     double alpha = offset / appbarScrollOffset;
@@ -67,24 +64,9 @@ class _HomePageState extends State<HomePage> {
                     // scale: 0.9,
                   ),
                 ),
-                SizedBox(
-                  height: 1000,
-                  child: Column(
-                    children: [
-                      InkWell(
-                        onTap: (){
-                          fetchGet().then((value) => {
-                            setState(() => {
-                              showResult = '请求结果：\nhideAppBar: ${value.hideAppBar}\nicon: ${value.icon}'
-                            })
-                          });
-                        },
-                        child: const Text('点我'),
-                      ),
-                      Text(showResult)
-                    ],
-                  ),
-                )
+                const TestAsync(),
+                const TestFuture(),
+                SharedPreferencesComponent()
               ],
             ),
           ),
@@ -103,25 +85,6 @@ class _HomePageState extends State<HomePage> {
           )
         ],
       ),
-    );
-  }
-}
-
-class CommonModel {
-  final String icon;
-  final String title;
-  final String url;
-  final String statusBarColor;
-  final bool hideAppBar;
-
-  CommonModel({required this.icon, required this.title, required this.url, required this.statusBarColor, required this.hideAppBar});
-  factory CommonModel.fromJson(Map<String, dynamic> json) {
-    return CommonModel(
-      icon: json['icon'],
-      title: json['title'],
-      url: json['url'],
-      statusBarColor: json['statusBarColor'],
-      hideAppBar: json['hideAppBar']
     );
   }
 }
