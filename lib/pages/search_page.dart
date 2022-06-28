@@ -1,4 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_trip/pages/test_grid.dart';
+import 'package:flutter_trip/pages/test_list.dart';
+import 'package:flutter_trip/pages/test_list_more.dart';
+import 'package:flutter_trip/pages/test_pull_refresh.dart';
 
 class SearchPage extends StatefulWidget {
   const SearchPage({Key? key}) : super(key: key);
@@ -10,9 +14,10 @@ class SearchPage extends StatefulWidget {
 class _SearchPageState extends State<SearchPage> {
   @override
   Widget build(BuildContext context) {
-    return const Scaffold(
+    return Scaffold(
       body: Center(
-        child: Text('搜索'),
+        // child: TestGrid(),
+        child: TestPullRefresh(),
       ),
     );
   }

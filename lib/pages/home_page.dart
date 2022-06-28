@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
+import 'dart:convert';
 import 'package:flutter_swiper_null_safety/flutter_swiper_null_safety.dart';
+import 'package:flutter_trip/dao/home_dao.dart';
+import 'package:flutter_trip/model/home_model.dart';
 import 'package:flutter_trip/pages/shared_preferences.dart';
 import 'package:flutter_trip/pages/test_async.dart';
 import 'package:flutter_trip/pages/test_future.dart';
@@ -20,7 +23,14 @@ class _HomePageState extends State<HomePage> {
     'https://img.win3000.com/m00/2b/38/9af24eb2152e2f5dc813d92755ae83d0.png'
   ];
   double appBarAlpha = 0;
+  String resultString = '';
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    loadData();
+  }
 
   void _onScroll(offset){
     double alpha = offset / appbarScrollOffset;
@@ -32,6 +42,19 @@ class _HomePageState extends State<HomePage> {
     setState(() {
       appBarAlpha = alpha;
     });
+  }
+
+  loadData() async {
+    try {
+      HomeModel model = await HomeDao.fetch();
+      setState(() {
+        resultString = json.encode(model);
+      });
+    } catch (e) {
+      setState(() {
+        resultString = e.toString();
+      });
+    }
   }
 
   @override
@@ -64,9 +87,13 @@ class _HomePageState extends State<HomePage> {
                     // scale: 0.9,
                   ),
                 ),
-                const TestAsync(),
-                const TestFuture(),
-                SharedPreferencesComponent()
+                SizedBox(
+                  height: 800,
+                  child: Text('$resultString resultString'),
+                )
+                // const TestAsync(),
+                // const TestFuture(),
+                // SharedPreferencesComponent()
               ],
             ),
           ),
